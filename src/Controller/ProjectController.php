@@ -65,27 +65,24 @@ class ProjectController extends AbstractController
     #[Route('/project/{id}', name: 'project_edit', methods: ['PUT', 'PATCH'])]
     public function edit(Request $request, int $id, ManagerRegistry $doctrine): Response
     {
-        $entityManager = $doctrine->getManager();
-        $project = $entityManager->getRepository(Project::class)->find($id);
-
-        if (!$project) {
-            return $this->json('No project found for id' . $id, 404);
+        $em = $doctrine->getManager();
+        $project = $em->getRepository(Project::class)->find($id);
+           if (!$project) {
+            return $this->json('No project found for id ' .$id, 404);
         }
-
         $content = json_decode($request->getContent());
-
         $project->setName($content->name);
-        $project->setDescription($content->name);
-        $entityManager->flush();
-
-        $data =  [
-            'id' => $project->getId(),
-            'name' => $project->getName(),
-            'description' => $project->getDescription(),
-        ];
-
+        $project->setDescription($content->description);
+        $em->flush();
+      
+        $data = [
+                'id'=> $project->getId(),
+                'name'=>$project->getName(),
+                'description'=>$project->getDescription(),
+            ];
         return $this->json($data);
     }
+
 
     #[Route('/project/{id}', name: 'project_delete', methods: ['DELETE'])]
     public function delete(Request $request, int $id, ManagerRegistry $doctrine): Response

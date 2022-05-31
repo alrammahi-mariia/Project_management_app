@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import axios from "axios";
 
-const ProjectShow = () => {
+function ProjectShow() {
   const [id, setId] = useState(useParams().id);
   const [project, setProject] = useState({ name: "", description: "" });
 
@@ -11,7 +11,8 @@ const ProjectShow = () => {
     axios
       .get(`/api/project/${id}`)
       .then(function (response) {
-        setProject(reponse.data);
+        setId(response.data);
+        setProject(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -24,12 +25,12 @@ const ProjectShow = () => {
         <h2 className="text-center mt-5 mb-3">Show Project</h2>
         <div className="card">
           <div className="card-header">
-            <Link className="btn-outline-info float-right" to="/">
-              View All Projects
+            <Link className="btn btn-outline-info float-right" to="/">
+              View All Project
             </Link>
           </div>
           <div className="card-body">
-            <b className="text-mutes">Name:</b>
+            <b className="text-muted"> Name:</b>
             <p>{project.name}</p>
             <b className="text-muted">Description:</b>
             <p>{project.description}</p>
@@ -38,6 +39,5 @@ const ProjectShow = () => {
       </div>
     </Layout>
   );
-};
-
+}
 export default ProjectShow;

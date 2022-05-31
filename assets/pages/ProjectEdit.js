@@ -1,26 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const ProjectEdit = () => {
+function ProjectEdit() {
   const [id, setId] = useState(useParams().id);
-  const [description, setDescription] = useState("");
+  const [project, setProject] = useState({ name: "", description: "" });
+  // const [name, setName] = useState("");
+  // const [description, setDescription] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     axios
-      .post("/api/project", formData)
+      .get(`/api/project/${id}`)
       .then(function (response) {
-        let project = response.data;
-        setName(project.name);
-        setDescription(project.description);
+        setId(response.data);
+        setProject(response.data);
       })
       .catch(function (error) {
+        console.log(error);
         Swal.fire({
           icon: "error",
-          title: "Error occurred!",
+          title: "An error occurred",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -29,38 +31,40 @@ const ProjectEdit = () => {
 
   const handleSave = () => {
     setIsSaving(true);
-    axios.patch(`/api/project/${id}`),
-      {
+    axios
+      .patch(`/api/project/${id}`, {
         name: name,
         description: description,
-      }
-        .then(function (response) {
-          Swal.fire({
-            icon: "success",
-            title: "Project saved successfully!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setIsSaving(false);
-        })
-        .catch(function (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Error occurred!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setIsSaving(false);
+      })
+      .then(function (response) {
+        Swal.fire({
+          icon: "success",
+          title: "Project updated succesfully!",
+          showConfirmButton: false,
+          timer: 1500,
         });
+        setIsSaving(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "An error occurred",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setIsSaving(false);
+      });
   };
+
   return (
     <Layout>
       <div className="container">
         <h2 className="text-center mt-5 mb-3">Edit Project</h2>
         <div className="card">
           <div className="card-header">
-            <Link className="btn-outline-info float-right" to="/">
-              View All Projects
+            <Link className="btn btn-outline-info float-right" to="/">
+              View All Project
             </Link>
           </div>
           <div className="card-body">
@@ -75,6 +79,7 @@ const ProjectEdit = () => {
                   type="text"
                   className="form-control"
                   id="name"
+                  name="name"
                 />
               </div>
               <div className="form-group">
@@ -87,9 +92,9 @@ const ProjectEdit = () => {
                   type="text"
                   className="form-control"
                   id="description"
-                  name="description"
                   rows="3"
-                />
+                  name="description"
+                ></textarea>
               </div>
               <button
                 disabled={isSaving}
@@ -105,6 +110,6 @@ const ProjectEdit = () => {
       </div>
     </Layout>
   );
-};
+}
 
 export default ProjectEdit;
