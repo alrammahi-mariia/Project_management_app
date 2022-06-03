@@ -7,8 +7,8 @@ import axios from "axios";
 function ProjectEdit() {
   const [id, setId] = useState(useParams().id);
   const [project, setProject] = useState({ name: "", description: "" });
-  // const [name, setName] = useState("");
-  // const [description, setDescription] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function ProjectEdit() {
         <div className="card">
           <div className="card-header">
             <Link className="btn btn-outline-info float-right" to="/">
-              View All Project
+              View All Projects
             </Link>
           </div>
           <div className="card-body">

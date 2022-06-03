@@ -62,7 +62,7 @@ class ProjectController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/project/{id}', name: 'project_edit', methods: ['PUT', 'PATCH'])]
+    #[Route('/project/{id}', name: 'project_edit', methods: ['PATCH'])]
     public function edit(Request $request, int $id, ManagerRegistry $doctrine): Response
     {
         $em = $doctrine->getManager();
